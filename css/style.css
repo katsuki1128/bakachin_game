@@ -1,0 +1,15 @@
+body {
+    background-image: url("../img/living_realsize.jpg");
+}
+
+/* 全てのHTML要素にパディングとマージンをゼロに設定。
+            「*」はワイルドカードのセレクタ。 */
+* {
+    padding: 5px, margin:5px;
+}
+
+canvas {
+    background: #7f3535;
+    display: block;
+    margin: 0 auto;
+}

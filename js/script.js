@@ -37,16 +37,6 @@ const brickPadding = 0;
 const brickOffsetTop = 234;//234
 const brickOffsetLeft = 200;//26がジャストの位置
 
-
-// スマホ部分
-const brickRowCount_sp = 4; //行の数
-const brickColumnCount_sp = 3;//列の数
-const brickWidth_sp = 30;
-const brickHeight_sp = 20;
-const brickPadding_sp = 0;
-const brickOffsetTop_sp = 100//234
-const brickOffsetLeft_sp = 20;//26がジャストの位置
-
 // スコアを表示
 let score = 0;
 
@@ -55,15 +45,6 @@ const bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
     for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
-    }
-}
-
-// スマホ部分
-const bricks = [];
-for (let c = 0; c < brickColumnCount_sp; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount_sp; r++) {
         bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }

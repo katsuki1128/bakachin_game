@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>bakachin_game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <canvas id="myCanvas" width="700" height="700"></canvas>
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+        let x = canvas.width / 3;
+        let y = canvas.height - 50;
+        let randomSpeed = (Math.random() * 3) + 3; // 3から5の間のランダムな数を生成
+        randomSpeed *= Math.random() < 0.5 ? -1 : 1; // 50%の確率で正負を反転
+        let dx = randomSpeed;
+        let dy = (Math.random() + 1) * randomSpeed;
+        console.log(randomSpeed, dx, dy);
+
+        let paddleHeight = 10;
+        let paddleWidth = 700;
+        let paddleX = (canvas.width - paddleWidth) / 2;
+        const bricks = [];
+        for (let c = 0; c < 1; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < 10; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+        function collisionDetection() {
+            for (let c = 0; c < 1; c++) {
+                for (let r = 0; r < 10; r++) {
+                    const b = bricks[c][r];
+                    if (b.status === 1) {
+                        if
+                            (x + 31 > b.x &&
+                            x - 29 < b.x + 700 &&
+                            y + 31 > b.y &&
+                            y - 29 < b.y + 20) {
+                            dx = -dx;
+                            dy = -dy;
+                            b.status = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        function drawBall() {
+            let ballImg = new Image();
+            ballImg.src = "img/bakaface.png";
+            ctx.drawImage(ballImg, x, y, 60, 60);
+        }
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawBricks() {
+            for (let c = 0; c < 1; c++) {
+                for (let r = 0; r < 10; r++) {
+
+                    if (bricks[c][r].status == 1) {
+                        const brickX = 200;
+                        const brickY = (r * 20);
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        ctx.beginPath();
+                        ctx.rect(brickX, brickY, 700, 20);
+                        ctx.fillStyle = "#000000";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            drawBall();
+            collisionDetection();
+
+            if (x + dx > canvas.width || x + dx < 60) {
+                dx = -dx;
+            }
+            if (y + dy < 60) {
+                dy = -dy;
+            }
+            else if (y + dy > canvas.height) {
+
+                if (x > paddleX && x < paddleX + paddleWidth) {
+                    if (y = y - paddleHeight) {
+                        dy = -dy;
+                    }
+                }
+            }
+            x += dx;
+            y += dy;
+        }
+        const interval = setInterval(draw, 10);
+    </script>
+</body>
+
+</html>

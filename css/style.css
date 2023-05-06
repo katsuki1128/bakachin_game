@@ -1,15 +1,16 @@
-body {
-    background-image: url("../img/living_realsize.jpg");
-}
+  /* 全てのHTML要素にパディングとマージンをゼロに設定。
+        「*」はワイルドカードのセレクタ。 */
+  * {
+      padding: 0, margin:0;
+  }
 
-/* 全てのHTML要素にパディングとマージンをゼロに設定。
-            「*」はワイルドカードのセレクタ。 */
-* {
-    padding: 5px, margin:5px;
-}
+  body {
+      text-align: center;
+  }
 
-canvas {
-    background: #7f3535;
-    display: block;
-    margin: 0 auto;
-}
+  canvas {
+      /* background: #ffd000; */
+      background-image: url("../img/living_nml_realsize.jpg");
+      display: block;
+      margin: 0 auto;
+  }

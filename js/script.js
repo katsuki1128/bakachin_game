@@ -1,16 +1,17 @@
-const canvas = document.getElementById("myCanvas");
 
+
+
+const canvas = document.getElementById("myCanvas");
 // 引数を"2d"として2Dグラフィックの描画に
 // 特化したメソッドやプロパティを持つオブジェクトを取得し、
 // 定数ctxに格納する。
 const ctx = canvas.getContext("2d");
 
+
+
+
 // 描画された円の半径を保持し、計算に使用する変数「ballRadius」を定義
 const ballRadius = 30;
-
-// ボールの初期位置を設定
-let x = canvas.width / 3;
-let y = canvas.height - 50;
 
 // ボールの速度（フレームごとにxとyを変数dx、dyで更新）ランダムに生成
 let randomSpeed = (Math.random() * 3) + 3; // 3から5の間のランダムな数を生成
@@ -19,23 +20,53 @@ let dx = randomSpeed;
 let dy = (Math.random() + 1) * randomSpeed;
 console.log(randomSpeed, dx, dy);
 
+
 // パドルの変数を定義
 let paddleHeight = 10;
 let paddleWidth = 300;
 let paddleX = (canvas.width - paddleWidth) / 2;
+
+// ボールの初期位置を設定
+
+// 無駄にパドルの上のどこから出るか、ランダムに発生させる。
+// パドルの左端
+const padleft = (canvas.width - paddleWidth) / 2 + 1;
+// パドルの右端
+const padright = (canvas.width - paddleWidth) / 2 + paddleWidth - 1;
+
+// パドルの右端から左端までランダムに数を生成する
+const padmin = padleft;
+const padmax = padright;
+const padRandomNunber = Math.floor(Math.random() * (padmax - padmin + 1) + padmin);
+
+console.log(padleft, padright, padRandomNunber);
+
+// ボールの初期値はランダムに発生させたパドルの上を設定
+let x = padRandomNunber;
+let y = canvas.height - paddleHeight - ballRadius;
 
 // 右と左のボタンが押されている状態を論理値として定義する
 let rightPressed = false;
 let leftPressed = false;
 
 // レンガの幅や高さ、行や列、ブロック間とキャンバスの端とのスキマなどの情報を定義
-const brickRowCount = 8; //行の数
+const brickRowCount = 12 //行の数
 const brickColumnCount = 16;//列の数
-const brickWidth = 30;
-const brickHeight = 20;
+const brickWidth = 26;
+const brickHeight = 19;
 const brickPadding = 0;
-const brickOffsetTop = 234;//234
-const brickOffsetLeft = 200;//26がジャストの位置
+const brickOffsetTop = 232;//234
+const brickOffsetLeft = 27;//26がジャストの位置
+
+//ブロックの幅や高さ、行や列、ブロック間とキャンバスの端とのスキマなどの情報を定義
+const blockRowCount = 12 //行の数
+const blockColumnCount = 16;//列の数
+const blockWidth = 26;
+const blockHeight = 19;
+const blockPadding = 0;
+const blockOffsetTop = 232;//234
+const blockOffsetLeft = 27;//26がジャストの位置
+
 
 // スコアを表示
 let score = 0;
@@ -45,7 +76,7 @@ const bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
     for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
+        bricks[c][r] = { x: 0, y: 0, status: 1, hitCount: 3 };
     }
 }
 
@@ -70,8 +101,6 @@ function keyUpHandler(e) {
     }
 }
 
-
-
 // 一つ一つのボールの座標と比較する
 function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) {
@@ -93,12 +122,34 @@ function collisionDetection() {
                     y - ballRadius - 1 < b.y + brickHeight) {
                     dx = -dx;
                     dy = -dy;
-                    b.status = 0;
-                    score++;//ブロックに当たると点数が加算
-                    if (score === brickColumnCount * brickRowCount) {
-                        alert("無事、放送事故はまぬがれました！");
-                        document.location.reload();
+
+                    // hitCountがある場合、hitCountを1減らし、0になったらブロックを消去する
+                    if (b.hitCount > 0) {
+                        b.hitCount--;
+                        if (b.hitCount === 0) {
+                            b.status = 0;
+                            score++;
+                            if (score === brickRowCount * brickColumnCount) {
+                                alert("無事、放送事故はまぬがれました！");
+                                document.location.reload();
+                            }
+                        }
+                    } else {
+                        b.status = 0;
+                        score++;
+                        if (score === brickRowCount * brickColumnCount) {
+                            alert("無事、放送事故はまぬがれました！");
+                            document.location.reload();
+                        }
                     }
+
+
+                    // b.status = 0;
+                    // score++;//ブロックに当たると点数が加算
+                    // if (score === brickColumnCount * brickRowCount) {
+                    //     alert("無事、放送事故はまぬがれました！");
+                    //     document.location.reload();
+                    // }
                 }
 
             }
@@ -108,11 +159,11 @@ function collisionDetection() {
 }
 
 // スコア表示を作成して更新する。
-function draScore() {
-    ctx.font = "46px Arial";//フォント
+function drawScore() {
+    ctx.font = "50px Arial";//フォント
     ctx.fillStyle = "#000000";//色
     //スコアと座標の引数
-    ctx.fillText(`放送事故を救え！残${brickColumnCount * brickRowCount - score}黒味`, 50, 200)
+    ctx.fillText(`放送事故を救え！あと${Math.floor((brickColumnCount * brickRowCount - score) * 100 / (brickColumnCount * brickRowCount))}%`, 50, 200)
 }
 
 // draw()関数のsetInterval 内で 10 ミリ秒ごとに実行
@@ -142,6 +193,7 @@ function drawPaddle() {
 function drawBricks() {
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
+            const b = bricks[c][r];
 
             // ブロックを描画するかどうか、statusプロパティの値をdrawBricks関数で確認
             if (bricks[c][r].status == 1) {
@@ -159,13 +211,19 @@ function drawBricks() {
                 ctx.fill();//塗りつぶしを実行
                 ctx.closePath();
 
-
-
+                // ブロックの残りhitCountを描画する
+                if (b.hitCount > 0) {
+                    ctx.font = "16px Arial";
+                    ctx.fillStyle = "#595959";
+                    ctx.fillText(b.hitCount, brickX + brickWidth * 0.3, brickY + brickHeight * 0.75);
+                }
             }
 
         }
     }
 }
+
+
 
 // 軌跡を消すためにカンバスの内容を消去するメソッドclearRectを記載
 function draw() {
@@ -173,7 +231,7 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
-    draScore()
+    drawScore()
     collisionDetection();
 
     // ボールの位置のxの値が未満だったらx軸方向の向きを変える
@@ -223,11 +281,10 @@ function draw() {
             paddleX = 0;
         }
     }
-
     x += dx;
     y += dy;
 
 }
 
-const interval = setInterval(draw, 10);
 
+const interval = setInterval(draw, 10);

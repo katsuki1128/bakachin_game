@@ -8,6 +8,20 @@
       text-align: center;
   }
 
+  #field {
+      .block {
+          width: 70px;
+          height: 100px;
+          line-height: 100px;
+          text-align: center;
+          border: 2px solid #aaa;
+          border-radius: 5px;
+          font-size: 30px;
+          margin: 8px;
+          float: left;
+      }
+  }
+
   canvas {
       /* background: #ffd000; */
       background-image: url("../img/living_nml_realsize.jpg");

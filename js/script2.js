@@ -1,5 +1,7 @@
-const canvas = document.getElementById("myCanvas");
 
+
+
+const canvas = document.getElementById("myCanvas");
 // 引数を"2d"として2Dグラフィックの描画に
 // 特化したメソッドやプロパティを持つオブジェクトを取得し、
 // 定数ctxに格納する。
@@ -51,131 +53,73 @@ const brickColumnCount = 16;//列の数
 const brickWidth = 26;
 const brickHeight = 19;
 const brickPadding = 0;
-const brickOffsetTop = 224;//234
-const brickOffsetLeft = 19;//26がジャストの位置
+const brickOffsetTop = 232;//234
+const brickOffsetLeft = 27;//26がジャストの位置
+
+// //ブロックの幅や高さ、行や列、ブロック間とキャンバスの端とのスキマなどの情報を定義
+// const blockRowCount = 12 //行の数
+// const blockColumnCount = 16;//列の数
+// const blockWidth = 26;
+// const blockHeight = 19;
+// const blockPadding = 0;
+// const blockOffsetTop = 232;//234
+// const blockOffsetLeft = 27;//26がジャストの位置
+
 
 // スコアを表示
 let score = 0;
 
 // 最初のブロックのヒットカウント
-const iniHitCount = 30;
-const exp_count = 10;
+const iniHitCount = 10;
 
-// パンチ、キック、爆発のフラグ変数
-
-let isBakachinPunchVisible = false;//パンチのフラグ変数
-const image2 = new Image();
-image2.src = "img/bakachin_punch.png";
-
-let isBakachinKickVisible = false;//キックのフラグ変数
-const image3 = new Image();
-image3.src = "img/bakachin_kick.png";
-
-let isExplosionVisible = false;//爆発のフラグ変数
-
-// 爆発エフェクト用のImageオブジェクト
-const explosionImage = new Image();
-explosionImage.src = "img/e005_explosion.gif";
-explosionImage.style.position = "absolute";
-explosionImage.style.left = "20px";
-explosionImage.style.top = "80px";
-explosionImage.width = 500;
-
-//バカチンパンチ、hitocountを減らす
-function punch() {
-
-    // hitCountを減らす処理
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            if (bricks[c][r].status === 1) {
-            }
-
-        }
-    }
-
-    // パンチが見えるようにfalseをtrueに
-    isBakachinPunchVisible = true;
-
-
-    // 新しいアニメーションを適用
-    document.body.style.animation = "change-background-kick 5s";
-
-
-    //5秒後に画像を消す処理
-
-    setTimeout(() => {
-        // document.body.removeChild(image2);
-        isBakachinPunchVisible = false;
-        document.body.style.backgroundImage = "url(img/living_nml_realsize.jpg)";
-    }, 5000);
-
-
-}
-
-//バカチンキック、hitocountを減らす
-function kick() {
-
-    // hitCountを減らす処理
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            if (bricks[c][r].status === 1) {
-            }
-        }
-    }
-    // キックが見えるようにfalseをtrueに
-    isBakachinKickVisible = true;
-
-    // 新しいアニメーションを適用
-    document.body.style.animation = "change-background-kick 5s";
-
-
-    //5秒後に画像を消す処理
-
-    setTimeout(() => {
-        isBakachinKickVisible = false;
-        document.body.style.backgroundImage = "url(img/living_nml_realsize.jpg)";
-    }, 5000);
-
-}
-
+const exp_count = 20;
 
 //爆発を表示
-function bakuhatsu() {
-
-    document.body.appendChild(explosionImage);
-    isExplosionVisible = true;
-
-    setTimeout(() => {
-        explosionImage.remove();
-    }, 1000);
+function click_gu() {
+    const image = new Image();
+    image.src = "img/e1668.gif";
+    image.style.position = "absolute";
+    image.style.left = "20px";
+    image.style.top = "80px";
+    image.width = 500;
+    document.body.appendChild(image);
 
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
             if (bricks[c][r].status === 1) {
                 bricks[c][r].hitCount -= exp_count;
-                const b = bricks[c][r];
-                // hitCountがある場合、hitCountを1減らし、0になったらブロックを消去する
-                if (b.hitCount > 0) {
-                    b.hitCount--;
-                    if (b.hitCount === 0) {
-                        b.status = 0;
-
-                        if (score === brickRowCount * brickColumnCount) {
-                            alert("無事、放送事故はまぬがれました！");
-                            document.location.reload();
-                        }
-                    }
-                } else {
-                    b.status = 0;
-                    if (score === brickRowCount * brickColumnCount) {
-                        alert("無事、放送事故はまぬがれました！");
-                        document.location.reload();
-                    }
-                }
             }
         }
     }
 }
+
+let isBakachinVisible = false;//フラグ変数
+
+//バカチンガーロゴを表示、hitocountを減らす
+function click_cho() {
+
+    // hitCountを減らす処理
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+            if (bricks[c][r].status === 1) {
+                bricks[c][r].hitCount -= exp_count / 2;
+            }
+        }
+    }
+    // 画像を表示する処理
+    const image2 = new Image();
+    image2.src = "img/bakachin02.png";
+    document.body.appendChild(image2);
+    isBakachinVisible = true;
+
+
+    //5秒後に画像を消す処理
+    setTimeout(() => {
+        document.body.removeChild(image02);
+        isBakachinVisible = false;
+    }, 5000);
+}
+
 
 // １つの二次元配列で全てのブロックを記録。行と列を通してループし、新しいブロックを作る。
 const bricks = [];
@@ -249,6 +193,13 @@ function collisionDetection() {
                         }
                     }
 
+
+                    // b.status = 0;
+                    // score++;//ブロックに当たると点数が加算
+                    // if (score === brickColumnCount * brickRowCount) {
+                    //     alert("無事、放送事故はまぬがれました！");
+                    //     document.location.reload();
+                    // }
                 }
 
             }
@@ -273,22 +224,22 @@ function drawScore() {
 // draw()関数のsetInterval 内で 10 ミリ秒ごとに実行
 // ボールの代わりにバカチンガーを表示
 function drawBall() {
-
+    // ctx.beginPath();
     let ballImg = new Image();
     ballImg.src = "img/bakaface.png";
+    // ballImg.classList.add("bakaface"); // bakafaceクラスを追加
+    // document.body.appendChild(ballImg); // canvas要素の後に追加
     ctx.drawImage(ballImg, x - ballRadius, y - ballRadius, ballRadius * 2, ballRadius * 2);
 
-    if (isBakachinPunchVisible) {
-        // dx *= -1;
-        dy *= -1;
-        ctx.drawImage(image2, x - 50, y - 150, 400, 300);
+    if (isBakachinVisible) {
+        ctx.drawImage(image2, x - ballRadius, y - ballRadius, ballRadius * 2, ballRadius * 2);
     }
 
-    if (isBakachinKickVisible) {
-        dx *= -1;
-        // dy *= -1;
-        ctx.drawImage(image3, x - 75, y - 150, 120, 250);
-    }
+    // ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    // ctx.fillStyle = "#0095DD";
+    // ctx.fill();
+    // ctx.closePath();
+    // ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
 }
 
 // パドルを画面上に表示する変数
@@ -316,7 +267,7 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                // ctx.strokeStyle = "#ffffff";//枠の色
+                // ctx.strokeStyle = "#797999";//枠の色
                 // ctx.stroke();//枠を描画
                 ctx.fillStyle = "#000000";//塗りつぶしの色
                 ctx.fill();//塗りつぶしを実行
@@ -325,7 +276,7 @@ function drawBricks() {
                 // ブロックの残りhitCountを描画する
                 if (b.hitCount > 0) {
                     ctx.font = "12px Arial";
-                    ctx.fillStyle = "#ffffff";
+                    ctx.fillStyle = "#595959";
                     ctx.fillText(b.hitCount, brickX + brickWidth * 0.1, brickY + brickHeight * 0.75);
                 }
             }
@@ -333,7 +284,6 @@ function drawBricks() {
         }
     }
 }
-
 
 
 
@@ -396,6 +346,9 @@ function draw() {
     x += dx;
     y += dy;
 
+    if (isBakachinVisible) {
+        ctx.drawImage(image2, x, y, ballRadius * 2, ballRadius * 2);
+    }
 
 }
 

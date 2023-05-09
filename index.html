@@ -3,18 +3,50 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>bakachin_game</title>
+    <title>放送事故を回避せよ！</title>
+    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js" defer></script>
+    <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
 
 </head>
 
 <body>
 
+    <!--------------------------------
+        canvas
+        ------------------------------->
+
     <canvas id="myCanvas" width="700" height="700"></canvas>
 
-    <!-- スタートボタン -->
-    <!-- <button id="start-button" onclick="go()">スタート</button> -->
+    <!--------------------------------
+    攻撃ボタン
+    ------------------------------->
+
+    <section id="controller" class="course fade">
+
+        <div class="buttons">
+            <div>
+                <a class="btn-emergency-real">
+                    <span class="btn-emergency-real-bottom" onclick="punch()"></span>
+                    <span class="btn-emergency-real-top" onclick="punch()"><span>パンチ</span></span>
+                </a>
+            </div>
+            <div>
+                <a class="btn-emergency-real">
+                    <span class="btn-emergency-real-bottom" onclick="kick()"></span>
+                    <span class="btn-emergency-real-top" onclick="kick()"><span>キック</span></span>
+                </a>
+            </div>
+            <div>
+                <a class="btn-emergency-real">
+                    <span class="btn-emergency-real-bottom" onclick="bakuhatsu()"></span>
+                    <span class="btn-emergency-real-top" onclick="bakuhatsu()"><span>爆発</span></span>
+                </a>
+            </div>
+        </div>
+
+    </section>
 </body>
 
 </html>

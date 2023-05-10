@@ -14,8 +14,6 @@ let randomSpeed = (Math.random() * 3) + 3; // 3から5の間のランダムな�
 randomSpeed *= Math.random() < 0.5 ? -1 : 1; // 50%の確率で正負を反転
 let dx = randomSpeed;
 let dy = (Math.random() + 1) * randomSpeed;
-console.log(randomSpeed, dx, dy);
-
 
 // パドルの変数を定義
 let paddleHeight = 10;
@@ -35,7 +33,6 @@ const padmin = padleft;
 const padmax = padright;
 const padRandomNunber = Math.floor(Math.random() * (padmax - padmin + 1) + padmin);
 
-console.log(padleft, padright, padRandomNunber);
 
 // ボールの初期値はランダムに発生させたパドルの上を設定
 let x = padRandomNunber;
@@ -75,7 +72,7 @@ let isExplosionVisible = false;//爆発のフラグ変数
 
 // 爆発エフェクト用のImageオブジェクト
 const explosionImage = new Image();
-explosionImage.src = "img/e005_explosion.gif";
+explosionImage.src = "img/e1668.gif";
 explosionImage.style.position = "absolute";
 explosionImage.style.left = "20px";
 explosionImage.style.top = "80px";
@@ -147,6 +144,7 @@ function bakuhatsu() {
 
     setTimeout(() => {
         explosionImage.remove();
+        isExplosionVisible = false;
     }, 1000);
 
     for (let c = 0; c < brickColumnCount; c++) {
@@ -154,9 +152,8 @@ function bakuhatsu() {
             if (bricks[c][r].status === 1) {
                 bricks[c][r].hitCount -= exp_count;
                 const b = bricks[c][r];
-                // hitCountがある場合、hitCountを1減らし、0になったらブロックを消去する
+                // hitCountがある場合、0になったらブロックを消去する
                 if (b.hitCount > 0) {
-                    b.hitCount--;
                     if (b.hitCount === 0) {
                         b.status = 0;
 
@@ -256,20 +253,6 @@ function collisionDetection() {
 
     }
 }
-
-
-
-// スコア表示を作成して更新する。
-function drawScore() {
-    ctx.font = "50px Arial";//フォント
-    ctx.fillStyle = "#000000";//色
-    //スコアと座標の引数
-    const hp = brickColumnCount * brickRowCount * iniHitCount;//ブロックHP合計
-    // const attack = (score + brickColumnCount * brickRowCount * exp_count);
-    console.log(score);
-    ctx.fillText(`放送事故を救え！あと${Math.floor((hp - score) * 100 / (hp))}%`, 50, 200)
-}
-
 // draw()関数のsetInterval 内で 10 ミリ秒ごとに実行
 // ボールの代わりにバカチンガーを表示
 function drawBall() {
@@ -290,6 +273,23 @@ function drawBall() {
         ctx.drawImage(image3, x - 75, y - 150, 120, 250);
     }
 }
+
+
+// スコア表示を作成して更新する。
+function drawScore() {
+    ctx.font = "72px Arial";//フォント
+    ctx.fillStyle = "#000000";//色
+    //スコアと座標の引数
+    const hp = brickColumnCount * brickRowCount * iniHitCount;//ブロックHP合計
+    let zanhp = hp - score;//HPの残り
+    console.log("残" + zanhp);
+    // ctx.fillText(`放送事故を救え！あと${Math.floor(zanhp * 100 / hp)}%`, 50, 200)
+    ctx.fillText(`${zanhp}`, 245, 185)
+    ctx.font = "50px Arial";//フォント
+    ctx.fillText(`残　　　　黒味`, 175, 180)
+
+}
+
 
 // パドルを画面上に表示する変数
 function drawPaddle() {
@@ -336,14 +336,14 @@ function drawBricks() {
 
 
 
-
 // 軌跡を消すためにカンバスの内容を消去するメソッドclearRectを記載
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
-    drawBall();
+
     drawPaddle();
     drawScore()
+    drawBall();
     collisionDetection();
 
     // ボールの位置のxの値が未満だったらx軸方向の向きを変える
@@ -400,3 +400,4 @@ function draw() {
 }
 
 const interval = setInterval(draw, 10);
+

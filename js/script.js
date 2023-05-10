@@ -253,43 +253,6 @@ function collisionDetection() {
 
     }
 }
-
-
-
-// スコア表示を作成して更新する。
-function drawScore() {
-    ctx.font = "72px Arial";//フォント
-    ctx.fillStyle = "#000000";//色
-    //スコアと座標の引数
-    const hp = brickColumnCount * brickRowCount * iniHitCount;//ブロックHP合計
-    let zanhp = hp - score;//HPの残り
-    console.log("残" + zanhp);
-    // ctx.fillText(`放送事故を救え！あと${Math.floor(zanhp * 100 / hp)}%`, 50, 200)
-    ctx.fillText(`${zanhp}`, 245, 185)
-    ctx.font = "50px Arial";//フォント
-    ctx.fillText(`残　　　　黒味`, 175, 180)
-
-}
-// // ゲージの長さを計算する
-// const gaugeWidth = 300;
-// const gaugeHeight = 20;
-// const gaugeValue = Math.floor((hp - score) * 100 / hp);
-
-// const gaugeLength = gaugeValue * gaugeWidth / 100;
-
-// // 枠を描画する
-// ctx.strokeStyle = "#000000";
-// ctx.strokeRect(50, 200, gaugeWidth, gaugeHeight);
-
-// // ゲージを塗りつぶす
-// ctx.fillStyle = "#ff0000";
-// ctx.fillRect(50, 200, gaugeLength, gaugeHeight);
-
-// // テキストを描画する
-// ctx.fillStyle = "#000000";
-// ctx.fillText(`放送事故を救え！あと${gaugeValue}%`, 50, 190);
-
-
 // draw()関数のsetInterval 内で 10 ミリ秒ごとに実行
 // ボールの代わりにバカチンガーを表示
 function drawBall() {
@@ -310,6 +273,23 @@ function drawBall() {
         ctx.drawImage(image3, x - 75, y - 150, 120, 250);
     }
 }
+
+
+// スコア表示を作成して更新する。
+function drawScore() {
+    ctx.font = "72px Arial";//フォント
+    ctx.fillStyle = "#000000";//色
+    //スコアと座標の引数
+    const hp = brickColumnCount * brickRowCount * iniHitCount;//ブロックHP合計
+    let zanhp = hp - score;//HPの残り
+    console.log("残" + zanhp);
+    // ctx.fillText(`放送事故を救え！あと${Math.floor(zanhp * 100 / hp)}%`, 50, 200)
+    ctx.fillText(`${zanhp}`, 245, 185)
+    ctx.font = "50px Arial";//フォント
+    ctx.fillText(`残　　　　黒味`, 175, 180)
+
+}
+
 
 // パドルを画面上に表示する変数
 function drawPaddle() {
@@ -360,9 +340,10 @@ function drawBricks() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
-    drawBall();
+
     drawPaddle();
     drawScore()
+    drawBall();
     collisionDetection();
 
     // ボールの位置のxの値が未満だったらx軸方向の向きを変える

@@ -4,7 +4,29 @@
       padding: 0, margin:0;
   }
 
+  #splash {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #333;
+      z-index: 9999999;
+      text-align: center;
+      color: #fff;
+  }
+
+  #splash-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+
+  /*========= 画面遷移のためのCSS ===============*/
+
+  /*画面遷移アニメーション*/
+
   body {
+
       text-align: center;
       font-family: "'Roboto', sans-serif;游ゴシック体", "游ゴシック", "Yu Gothic";
       background-image: url("../img/living_nml_realsize.jpg");
@@ -12,6 +34,7 @@
       animation: change-background 0.5s;
       position: absolute;
   }
+
 
   @keyframes change-background-kick {
       0% {

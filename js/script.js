@@ -155,8 +155,6 @@ function bakuhatsu() {
 
                     const b = bricks[c][r];
 
-
-
                     // hitCountがある場合、0になったらブロックを消去する
                     if (b.hitCount > 0) {
                         // 爆発が起きる前のブロックのhitCountをhitCountBeforeExplosionに代入
@@ -176,48 +174,16 @@ function bakuhatsu() {
                         // 爆発が起きた後のhitCountを再代入
                         expScore += expTotal;
 
-                        console.log(hitCountBeforeExplosion, hitCountAfterExplosion, expTotal, expScore);
+                        // console.log(hitCountBeforeExplosion, hitCountAfterExplosion, expTotal, expScore);
 
                         if (hitCountAfterExplosion <= 0) {
                             b.status = 0;
                         }
 
-                        if (score === brickRowCount * brickColumnCount) {
-                            alert("無事、放送事故はまぬがれました！");
-                            document.location.reload();
-                        }
-
                     } else {
                         b.status = 0;
-                        if (score === brickRowCount * brickColumnCount) {
-                            alert("無事、放送事故はまぬがれました！");
-                            document.location.reload();
-                        }
+
                     }
-
-
-                    // // hitCountがある場合、0になったらブロックを消去する
-                    // if (b.hitCount > 0) {
-
-                    //     expScore += (b.hitCount);
-
-
-                    //     if (b.hitCount === 0) {
-                    //         b.status = 0;
-
-
-                    //         if (score === brickRowCount * brickColumnCount) {
-                    //             alert("無事、放送事故はまぬがれました！");
-                    //             document.location.reload();
-                    //         }
-                    //     }
-                    // } else {
-                    //     b.status = 0;
-                    //     if (score === brickRowCount * brickColumnCount) {
-                    //         alert("無事、放送事故はまぬがれました！");
-                    //         document.location.reload();
-                    //     }
-                    // }
 
                 }
             }
@@ -288,17 +254,10 @@ function collisionDetection() {
                         if (b.hitCount === 0) {
                             b.status = 0;
 
-                            if (score === brickRowCount * brickColumnCount) {
-                                alert("無事、放送事故はまぬがれました！");
-                                document.location.reload();
-                            }
+
                         }
                     } else {
                         b.status = 0;
-                        if (score === brickRowCount * brickColumnCount) {
-                            alert("無事、放送事故はまぬがれました！");
-                            document.location.reload();
-                        }
                     }
                 }
             }
@@ -337,55 +296,72 @@ function drawScore() {
 
     let zanhp = hp - score - expScore;//HPのafter
 
-    // 変化前の数字
-    let zanhpStart = zanhp;
-    // 変化後の数字
-    let zanhpEnd = zanhp - score - expScore;
+    // 数字を表示する
 
-    // アニメーションの総時間（ミリ秒）
-    const duration = 1000;
-    // アニメーションの開始時間
-    const startTime = Date.now();
-
-    // アニメーションループ
-    function animate() {
-        // 現在の時刻
-        const currentTime = Date.now();
-
-        // 経過時間
-        const elapsedTime = currentTime - startTime;
-
-        // 進捗率
-
-        const progress = Math.min(elapsedTime / duration, 1);
-        // 現在の数字
-        const currentValue = zanhpStart + (zanhpEnd - zanhpStart) * easeOutCubic(progress);
-        // 数字を表示する
-
-        ctx.fillText(`${Math.floor(currentValue)}`, 245, 185);
-
-        // console.log(zanhpStart, zanhpEnd, zanhpStart - zanhpEnd, score, expScore);
-
-        // // アニメーションが終了していなければ再帰的に呼び出す
-        // if (progress < 1) {
-        //     requestAnimationFrame(animate);
-        // }
-    }
-
-    // イージング関数（ここではeaseOutCubic）
-    function easeOutCubic(t) {
-        return (--t) * t * t + 1;
-    }
-
-    // アニメーションを開始する
-    animate();
-
-    // ctx.fillText(`放送事故を救え！あと${Math.floor(zanhp * 100 / hp)}%`, 50, 200)
-    // ctx.fillText(`${zanhp}`, 245, 185)
+    ctx.fillText(zanhp, 245, 185);
 
     ctx.font = "50px Arial";//フォント
-    ctx.fillText(`残　　　　黒味`, 175, 180)
+    ctx.fillText(`残　　　　黒味`, 175, 180);
+
+    if (zanhp < 1) {
+        setTimeout(function () {
+            // alert("無事、放送事故はまぬがれました！");
+            // location.reload(true);
+            // clearInterval(interval);
+        }, 1000);
+    }
+    // // 変化前の数字
+    // let zanhpStart = zanhp + score + expScore;
+    // // 変化後の数字
+    // let zanhpEnd = zanhp;
+
+    // // アニメーションの総時間（ミリ秒）
+    // const duration = 1000;
+    // // アニメーションの開始時間
+    // const startTime = Date.now();
+
+    // // アニメーションループ
+    // function animate() {
+    //     // 現在の時刻
+    //     const currentTime = Date.now();
+
+    //     // 経過時間
+    //     const elapsedTime = currentTime - startTime;
+
+    //     // 進捗率
+    //     const progress = Math.min(elapsedTime / duration, 1);
+
+    //     // 現在の数字
+    //     const currentValue = zanhpStart + (zanhpEnd - zanhpStart) * easeOutCubic(progress);
+    //     console.log(easeOutCubic(progress));
+
+    //     // 数字を表示する
+
+    //     ctx.fillText(`${Math.floor(zanhp)}`, 245, 185);
+
+    //     console.log(zanhpStart, zanhpEnd, zanhpStart - zanhpEnd, score, expScore);
+
+    //     // // アニメーションが終了していなければ再帰的に呼び出す
+    //     // if (progress < 1) {
+    //     //     requestAnimationFrame(animate);
+    //     // } else {
+
+
+    //     // }
+    // }
+
+    // // イージング関数（ここではeaseOutCubic）
+    // function easeOutCubic(t) {
+    //     return (--t) * t * t + 1;
+    // }
+
+    // // アニメーションを開始する
+    // animate();
+
+
+
 }
+
 
 
 

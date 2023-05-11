@@ -74,9 +74,9 @@ let isExplosionVisible = false;//爆発のフラグ変数
 const explosionImage = new Image();
 explosionImage.src = "img/e1668.gif";
 explosionImage.style.position = "absolute";
-explosionImage.style.left = "20px";
-explosionImage.style.top = "80px";
-explosionImage.width = 500;
+explosionImage.style.left = "-150px";
+explosionImage.style.top = "-150px";
+explosionImage.width = 800;
 
 //バカチンパンチ、hitocountを減らす
 function punch() {
@@ -134,44 +134,99 @@ function kick() {
     }, 5000);
 
 }
-
+let expScore = 0;//爆発で消えたブロックのhitCountの総和
 
 //爆発を表示
 function bakuhatsu() {
 
-    document.body.appendChild(explosionImage);
-    isExplosionVisible = true;
+    // 背景に新しい画像を適用
+    document.body.style.animation = "change-background-bakuhatsu 3s";
 
-    setTimeout(() => {
-        explosionImage.remove();
-        isExplosionVisible = false;
-    }, 1000);
+    // 2秒後にisExplosionVisibleをtrueにする
+    setTimeout(function () {
+        document.body.appendChild(explosionImage);
+        isExplosionVisible = true;
 
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            if (bricks[c][r].status === 1) {
-                bricks[c][r].hitCount -= exp_count;
-                const b = bricks[c][r];
-                // hitCountがある場合、0になったらブロックを消去する
-                if (b.hitCount > 0) {
-                    if (b.hitCount === 0) {
-                        b.status = 0;
+        for (let c = 0; c < brickColumnCount; c++) {
+            for (let r = 0; r < brickRowCount; r++) {
+                if (bricks[c][r].status === 1) {
+
+                    // bricks[c][r].hitCount -= exp_count;
+
+                    const b = bricks[c][r];
+
+
+
+                    // hitCountがある場合、0になったらブロックを消去する
+                    if (b.hitCount > 0) {
+                        // 爆発が起きる前のブロックのhitCountをhitCountBeforeExplosionに代入
+                        let hitCountBeforeExplosion = b.hitCount;
+
+                        // 爆発が起きた後のhitCountを再代入
+                        b.hitCount -= exp_count;
+
+                        // 爆発が起きた後のブロックのhitCountをhitCountAfterExplosionに代入
+                        let hitCountAfterExplosion = b.hitCount;
+
+                        // hitCountAfterExplosionが0より小さければ0を代入、そうでなければそのままの値を代入
+                        hitCountAfterExplosion = hitCountAfterExplosion < 0 ? 0 : hitCountAfterExplosion;
+
+                        // 爆発で消したブロックの数値の数
+                        let expTotal = hitCountBeforeExplosion - hitCountAfterExplosion;
+                        // 爆発が起きた後のhitCountを再代入
+                        expScore += expTotal;
+
+                        console.log(hitCountBeforeExplosion, hitCountAfterExplosion, expTotal, expScore);
+
+                        if (hitCountAfterExplosion <= 0) {
+                            b.status = 0;
+                        }
 
                         if (score === brickRowCount * brickColumnCount) {
                             alert("無事、放送事故はまぬがれました！");
                             document.location.reload();
                         }
+
+                    } else {
+                        b.status = 0;
+                        if (score === brickRowCount * brickColumnCount) {
+                            alert("無事、放送事故はまぬがれました！");
+                            document.location.reload();
+                        }
                     }
-                } else {
-                    b.status = 0;
-                    if (score === brickRowCount * brickColumnCount) {
-                        alert("無事、放送事故はまぬがれました！");
-                        document.location.reload();
-                    }
+
+
+                    // // hitCountがある場合、0になったらブロックを消去する
+                    // if (b.hitCount > 0) {
+
+                    //     expScore += (b.hitCount);
+
+
+                    //     if (b.hitCount === 0) {
+                    //         b.status = 0;
+
+
+                    //         if (score === brickRowCount * brickColumnCount) {
+                    //             alert("無事、放送事故はまぬがれました！");
+                    //             document.location.reload();
+                    //         }
+                    //     }
+                    // } else {
+                    //     b.status = 0;
+                    //     if (score === brickRowCount * brickColumnCount) {
+                    //         alert("無事、放送事故はまぬがれました！");
+                    //         document.location.reload();
+                    //     }
+                    // }
+
                 }
             }
         }
-    }
+    }, 2000);
+    setTimeout(() => {
+        explosionImage.remove();
+        isExplosionVisible = false;
+    }, 2500);
 }
 
 // １つの二次元配列で全てのブロックを記録。行と列を通してループし、新しいブロックを作る。
@@ -245,15 +300,12 @@ function collisionDetection() {
                             document.location.reload();
                         }
                     }
-
                 }
-
             }
         }
-
     }
 }
-// draw()関数のsetInterval 内で 10 ミリ秒ごとに実行
+
 // ボールの代わりにバカチンガーを表示
 function drawBall() {
 
@@ -279,23 +331,78 @@ function drawBall() {
 function drawScore() {
     ctx.font = "72px Arial";//フォント
     ctx.fillStyle = "#000000";//色
+
     //スコアと座標の引数
     const hp = brickColumnCount * brickRowCount * iniHitCount;//ブロックHP合計
-    let zanhp = hp - score;//HPの残り
-    console.log("残" + zanhp);
+
+    let zanhp = hp - score - expScore;//HPのafter
+
+    // 変化前の数字
+    let zanhpStart = zanhp;
+    // 変化後の数字
+    let zanhpEnd = zanhp - score - expScore;
+
+    // アニメーションの総時間（ミリ秒）
+    const duration = 1000;
+    // アニメーションの開始時間
+    const startTime = Date.now();
+
+    // アニメーションループ
+    function animate() {
+        // 現在の時刻
+        const currentTime = Date.now();
+
+        // 経過時間
+        const elapsedTime = currentTime - startTime;
+
+        // 進捗率
+
+        const progress = Math.min(elapsedTime / duration, 1);
+        // 現在の数字
+        const currentValue = zanhpStart + (zanhpEnd - zanhpStart) * easeOutCubic(progress);
+        // 数字を表示する
+
+        ctx.fillText(`${Math.floor(currentValue)}`, 245, 185);
+
+        // console.log(zanhpStart, zanhpEnd, zanhpStart - zanhpEnd, score, expScore);
+
+        // // アニメーションが終了していなければ再帰的に呼び出す
+        // if (progress < 1) {
+        //     requestAnimationFrame(animate);
+        // }
+    }
+
+    // イージング関数（ここではeaseOutCubic）
+    function easeOutCubic(t) {
+        return (--t) * t * t + 1;
+    }
+
+    // アニメーションを開始する
+    animate();
+
     // ctx.fillText(`放送事故を救え！あと${Math.floor(zanhp * 100 / hp)}%`, 50, 200)
-    ctx.fillText(`${zanhp}`, 245, 185)
+    // ctx.fillText(`${zanhp}`, 245, 185)
+
     ctx.font = "50px Arial";//フォント
     ctx.fillText(`残　　　　黒味`, 175, 180)
-
 }
 
 
+
+
 // パドルを画面上に表示する変数
+
+const paddleImage = new Image();
+paddleImage.src = "img/bakachin02.png";
+
 function drawPaddle() {
+
+    // // パドル画像を描画
+    // ctx.drawImage(paddleImage, paddleX, canvas.height - 50, paddleWidth, paddleHeight + 20);
+
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#cc0000";
     ctx.fill();
     ctx.closePath();
 }
@@ -340,7 +447,6 @@ function drawBricks() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
-
     drawPaddle();
     drawScore()
     drawBall();
@@ -368,7 +474,7 @@ function draw() {
                 } else if (leftPressed) {
                     // 左ボタンを押すと、Ｘ軸の速さの絶対値分だけマイナスされる
                     dx = dx - Math.abs(dx) * 0.7 - 1;
-                    console.log(Math.abs(dx));
+
                 }
             }
         }

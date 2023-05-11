@@ -50,6 +50,20 @@
       }
   }
 
+  @keyframes change-background-bakuhatsu {
+      0% {
+          background-image: url("../img/living_nml_realsize.jpg");
+      }
+
+      10% {
+          background-image: url("../img/bakuhatsuBG.jpg");
+      }
+
+      100% {
+          background-image: url("../img/bakuhatsuBG.jpg");
+      }
+  }
+
   canvas {
       position: absolute;
       display: block;

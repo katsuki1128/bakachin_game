@@ -225,22 +225,22 @@ function keyUpHandler(e) {
     }
 }
 
-// タッチパネルのイベントリスナーを追加
-document.addEventListener("touchstart", touchStartHandler, false);
-document.addEventListener("touchend", touchEndHandler, false);
+// // タッチパネルのイベントリスナーを追加
+// document.addEventListener("touchstart", touchStartHandler, false);
+// document.addEventListener("touchend", touchEndHandler, false);
 
-function touchStartHandler(e) {
-    // タッチイベントの最初のタッチ位置を取得
-    const touchX = e.touches[0].clientX;
-    const screenWidth = window.innerWidth;
+// function touchStartHandler(e) {
+//     // タッチイベントの最初のタッチ位置を取得
+//     const touchX = e.touches[0].clientX;
+//     const screenWidth = window.innerWidth;
 
-    // タッチ位置に応じてパドルを操作
-    if (touchX < screenWidth / 2) {
-        leftPressed = true;
-    } else {
-        rightPressed = true;
-    }
-}
+//     // タッチ位置に応じてパドルを操作
+//     if (touchX < screenWidth / 2) {
+//         leftPressed = true;
+//     } else {
+//         rightPressed = true;
+//     }
+// }
 
 // 一つ一つのボールの座標と比較する
 function collisionDetection() {

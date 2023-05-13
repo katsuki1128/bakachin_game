@@ -122,7 +122,7 @@ function kick() {
     // キックが見えるようにfalseをtrueに
     isBakachinKickVisible = true;
 
-    // 新しいアニメーションを適用
+    // 新しい背景アニメーションを適用
     document.body.style.animation = "change-background-kick 5s";
 
 
@@ -225,6 +225,23 @@ function keyUpHandler(e) {
     }
 }
 
+// タッチパネルのイベントリスナーを追加
+document.addEventListener("touchstart", touchStartHandler, false);
+document.addEventListener("touchend", touchEndHandler, false);
+
+function touchStartHandler(e) {
+    // タッチイベントの最初のタッチ位置を取得
+    const touchX = e.touches[0].clientX;
+    const screenWidth = window.innerWidth;
+
+    // タッチ位置に応じてパドルを操作
+    if (touchX < screenWidth / 2) {
+        leftPressed = true;
+    } else {
+        rightPressed = true;
+    }
+}
+
 // 一つ一つのボールの座標と比較する
 function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) {
@@ -304,11 +321,11 @@ function drawScore() {
     ctx.fillText(`残　　　　黒味`, 175, 180);
 
     if (zanhp < 1) {
-        setTimeout(function () {
-            // alert("無事、放送事故はまぬがれました！");
-            // location.reload(true);
-            // clearInterval(interval);
-        }, 1000);
+        // setTimeout(function () {
+        //     alert("無事、放送事故はまぬがれました！");
+        //     // location.reload(true);
+        //     // clearInterval(interval);
+        // }, 1000);
     }
     // // 変化前の数字
     // let zanhpStart = zanhp + score + expScore;
